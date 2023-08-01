@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{category.description|truncatewords:155 }}
+    {% else %}
+        Welcome to Dev's Scented Candles...
+    {% endif %}
+{% endblock %}
+{% block title %}
+    {% if category %}
+        {{category.name}} - Dev's Scented Candles
+    {% else %}
+        See our new collection - Dev's Scented Candles
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if category %}
+<div>
+        <div class="row my_row_class">
+            <div class="mx-auto">
+            <p><img  src="{% static 'img/banner_3.png' %}" alt="Our products" width="1350px;" height="420px;"></p>
+                <a class="btn btn-success" href="{% url 'shop:allProdCat' %}"  style="padding-left:5px;"><b>Our Product Collections</b></a>
+        </div>
+            </div>
+    </div>
+    {% endif %}
+<div class="mx_auto">
+    {% if category %}
+    <img class="my_image" style="padding-top:10px;" src="{{category.image.url}}" alt="{{category.name}}" width="400px;" height="250px;">
+    </div>
+    <br>
+<div>
+    <h1 class="text-center my_title">{{category.name}}</h1>
+    <p class="text-justify" style="padding-bottom:50px;"><b>{{category.description}}</b></p>
+</div>
+    {% else %}
+        <div>
+        <img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" alt="Our products" width="1350px;" height="420px;">
+        </div>
+    <br>
+    <div>
+        <h1 class="text-center my_title">Our Product Collections</h1>
+        <p class="text-center"><b>Ten features of scented candle that make everyone fall in love</b></p>
+        <p class="text-center" style="padding-left:8px;">A wax light is a subtle item yet it's every ingredient embodies important aspects of a lifespan. Take for example its wax which implies life. The wick represents the soul of life; humanity. Light defines love, divinity, and harmony. The delicate flicker shows resilience and the heat may signify humility and never-ending spirit.</p>
+
+    </div>
+        {% endif %}
+        <div class="container">
+            <div class="row mx_auto">
+        {% for product in products.object_list %}
+            <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-4" style="padding:8px;">
+                <div class="card text-center" style="min-width:18rem;">
+          <a href="{{product.get_url}}"><img class="card-img-tpo my_image" src="{{product.image.url}}" alt="{{product.name}}" width="250px;" height="230px;"></a>
+                    <div class="card-body">
+                        <h4>{{product.name}}</h4>
+                        <p>{{product.price}}</p>
+                    </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+            <div class="mx-auto">
+                {% if products.paginator.num_pages > 1 %}
+                <hr>
+                <div class="text-center">
+                    {% for pg in products.paginator.page_range %}
+                    <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <br>
+            </div>
+    </div>
+
+{% endblock %}
